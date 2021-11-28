@@ -8,10 +8,12 @@ socket.on("disconnect", () => {
 });
 
 socket.on("newMessage", (message) => {
+  const formattedTime = moment(message.createAt).format("LT");
   console.log("new message", message);
-  let li = document.createElement("li");
-  li.innerText = `${message.from}: ${message.text}`;
-  document.querySelector("body").appendChild(li);
+  let div = document.createElement("div");
+  div.setAttribute("class", "col-xs-12 p-b-10 odd");
+  div.innerHTML = `<div class="chat-image  profile-picture max-profile-picture"><img alt="${message.from}" src="storage/user_image/Bylancer.jpg"></div><div class="chat-body">  <div class="chat-text"><h4>${message.from}</h4><p>${message.text}</p><b>${formattedTime}</b><span class="msg-status msg-mega"><i class="fa fa-check"></i></span></div></div>`;
+  document.querySelector("#chatbox_Deven").appendChild(div);
 });
 socket.on("newLocationMessage", (message) => {
   console.log("newLocationMessage", message);
@@ -26,21 +28,19 @@ socket.on("newLocationMessage", (message) => {
 socket.emit("createMessage", { from: "john", text: "hey" }, () => {
   console.log("server got it");
 });
-
-document.getElementById("submit_btn").addEventListener("click", (e) => {
-  e.preventDefault();
+const sendmessage = () => {
   socket.emit(
     "createMessage",
     {
       from: "User",
-      text: document.getElementById("message").value,
+      text: document.querySelector("#chatboxtextarea").value,
     },
     () => {
-      document.getElementById("message").value = "";
+      document.querySelector("#chatboxtextarea").value = "";
     }
   );
-});
-document.getElementById("send_loc").addEventListener("click", (e) => {
+};
+const sendLocation = () => {
   if (!navigator.geolocation) {
     return alert("geolocation is not supported by your browser.");
   }
@@ -55,4 +55,4 @@ document.getElementById("send_loc").addEventListener("click", (e) => {
       alert("unable to fetch location");
     }
   );
-});
+};
