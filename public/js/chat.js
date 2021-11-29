@@ -1,6 +1,16 @@
 let socket = io();
+
 socket.on("connect", () => {
-  console.log("connected to server");
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  socket.emit("join", params, (err) => {
+    if (err) {
+      alert(err);
+      window.location.href = "/";
+    } else {
+    }
+  });
+  console.log("params: ", params);
 });
 
 socket.on("disconnect", () => {
