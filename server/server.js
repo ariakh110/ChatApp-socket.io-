@@ -4,7 +4,7 @@ const express = require("express");
 const socketIO = require("socket.io");
 /** */
 const { generateMessage, generateLocationMessage } = require("./utils/message");
-const { isRealString } = require("./utils/IsRealString");
+const { isRealString } = require("./utils/isRealString");
 const publicPath = path.join(__dirname, "/../public");
 const port = process.env.PORT || 3000;
 let app = express();
@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
       callback("email or password is incorrect");
     }
     socket.join(params.email, params.pass);
-    
+
     socket.emit("newMessage", generateMessage("admin", "welcome to chat app!"));
     socket.broadcast.emit(
       "newMessage",
